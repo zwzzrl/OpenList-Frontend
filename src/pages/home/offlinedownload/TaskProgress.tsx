@@ -5,25 +5,24 @@ import {
   Text,
   Badge,
   Progress,
-  ProgressIndicator,
-  Box,
-} from "@hope-ui/solid";
-import { TaskInfo } from "./task";
-import { getFileSize } from "~/utils";
-import { Show, createSignal, JSX } from "solid-js";
-import { useT } from "~/hooks";
-import { me } from "~/store";
+  ProgressIndicator
+} from "@hope-ui/solid"
+import { TaskInfo } from "./task"
+import { getFileSize } from "~/utils"
+import { Show, createSignal, JSX } from "solid-js"
+import { useT } from "~/hooks"
+import { me } from "~/store"
 
 // 复制 helper.tsx 中的 getPath 函数（用于生成路径链接）
 const getPath = (
   device: string,
   path: string,
-  asLink: boolean = true,
+  asLink: boolean = true
 ): JSX.Element => {
-  const fullPath = (device === "/" ? "" : device) + path;
-  const prefix = me().base_path === "/" ? "" : me().base_path;
-  const accessible = fullPath.startsWith(prefix);
-  const [underline, setUnderline] = createSignal(false);
+  const fullPath = (device === "/" ? "" : device) + path
+  const prefix = me().base_path === "/" ? "" : me().base_path
+  const accessible = fullPath.startsWith(prefix)
+  const [underline, setUnderline] = createSignal(false)
   return accessible && asLink ? (
     <a
       style={underline() ? "text-decoration: underline" : ""}
@@ -35,42 +34,42 @@ const getPath = (
     </a>
   ) : (
     <p>{fullPath}</p>
-  );
-};
+  )
+}
 
 // 解析任务名称，返回文件名和路径信息
 const parseTaskName = (name: string) => {
   // download 类型：download 文件名 to (路径)
-  let match = name.match(/^download (.+) to \((.+)\)$/);
+  let match = name.match(/^download (.+) to \((.+)\)$/)
   if (match) {
     return {
       type: "download" as const,
       fileName: match[1],
-      path: match[2],
-    };
+      path: match[2]
+    }
   }
   // transfer/upload 类型：transfer [设备](路径) to [目标设备](目标路径) 或 upload [文件名](URL) to [目标设备](目标路径)
   match = name.match(
-    /^(transfer|upload) \[(.*?)\]\((.*?)\) to \[(.*?)\]\((.*?)\)$/,
-  );
+    /^(transfer|upload) \[(.*?)\]\((.*?)\) to \[(.*?)\]\((.*?)\)$/
+  )
   if (match) {
-    const type = match[1] as "transfer" | "upload";
-    const bracketContent = match[2]; // 方括号内：transfer 为设备，upload 为文件名
-    const urlOrPath = match[3]; // 圆括号内：transfer 为路径，upload 为 URL
-    const dstDevice = match[4];
-    const dstPath = match[5];
+    const type = match[1] as "transfer" | "upload"
+    const bracketContent = match[2] // 方括号内：transfer 为设备，upload 为文件名
+    const urlOrPath = match[3] // 圆括号内：transfer 为路径，upload 为 URL
+    const dstDevice = match[4]
+    const dstPath = match[5]
 
     if (type === "transfer") {
       // 从路径中提取文件名（最后一段，去除参数）
-      const fileName = urlOrPath.split("/").pop()?.split("?")[0] || "未知文件";
+      const fileName = urlOrPath.split("/").pop()?.split("?")[0] || "未知文件"
       return {
         type,
         fileName,
         srcDevice: bracketContent,
         srcPath: urlOrPath,
         dstDevice,
-        dstPath,
-      };
+        dstPath
+      }
     } else {
       // upload 类型：文件名直接取自方括号
       return {
@@ -79,12 +78,12 @@ const parseTaskName = (name: string) => {
         srcDevice: "",
         srcPath: urlOrPath,
         dstDevice,
-        dstPath,
-      };
+        dstPath
+      }
     }
   }
-  return null;
-};
+  return null
+}
 
 export const StatusColor = {
   0: "neutral",
@@ -92,12 +91,12 @@ export const StatusColor = {
   2: "warning",
   3: "danger",
   4: "success",
-  5: "info",
-} as const;
+  5: "info"
+} as const
 
 export const TaskItem = (props: TaskInfo) => {
-  const t = useT();
-  const parsed = parseTaskName(props.name);
+  const t = useT()
+  const parsed = parseTaskName(props.name)
 
   return (
     <VStack
@@ -157,7 +156,7 @@ export const TaskItem = (props: TaskInfo) => {
         </Text>
       </Show>
     </VStack>
-  );
-};
+  )
+}
 
-export default TaskItem;
+export default TaskItem
