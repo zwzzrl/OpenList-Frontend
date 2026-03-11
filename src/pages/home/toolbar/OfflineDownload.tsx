@@ -1,34 +1,33 @@
 import {
   Box,
   createDisclosure,
-  HStack,
   Heading,
-  VStack,
+  HStack,
   Text,
+  VStack,
 } from "@hope-ui/solid"
-import { ModalInput, SelectWrapper } from "~/components"
-import { useFetch, useRouter, useT } from "~/hooks"
-import {
-  offlineDownload,
-  bus,
-  handleRespWithNotifySuccess,
-  r,
-  handleResp,
-} from "~/utils"
-import {
-  createSignal,
-  onCleanup,
-  onMount,
-  createEffect,
-  For,
-  Show,
-} from "solid-js"
-import { PResp } from "~/types"
 import bencode from "bencode"
 import crypto from "crypto-js"
+import {
+  createEffect,
+  createSignal,
+  For,
+  onCleanup,
+  onMount,
+  Show,
+} from "solid-js"
+import { FullLoading, ModalInput, SelectWrapper } from "~/components"
+import { useFetch, useRouter, useT } from "~/hooks"
 import { useTasks } from "~/store/task"
+import { PResp } from "~/types"
+import {
+  bus,
+  handleResp,
+  handleRespWithNotifySuccess,
+  offlineDownload,
+  r,
+} from "~/utils"
 import TaskItem from "./TaskProgress"
-import { FullLoading } from "~/components/FullLoading"
 
 const deletePolicies = [
   "upload_download_stream",

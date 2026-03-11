@@ -10,7 +10,7 @@ import type { TaskInfo } from "~/types"
 import { getFileSize } from "~/utils"
 import { Show } from "solid-js"
 import { useT } from "~/hooks"
-import { getPath } from "../../manage/tasks/helper"
+import { getPath } from "~/pages/manage/tasks/helper"
 
 // 解析任务名称，返回文件名和路径信息
 const parseTaskName = (name: string) => {
@@ -36,7 +36,8 @@ const parseTaskName = (name: string) => {
 
     if (type === "transfer") {
       // 从路径中提取文件名（最后一段，去除参数）
-      const fileName = urlOrPath.split("/").pop()?.split("?")[0] || "未知文件"
+      const fileName =
+        urlOrPath.split("/").pop()?.split("?")[0] || "Unknown file"
       return {
         type,
         fileName,
@@ -110,7 +111,9 @@ export const TaskItem = (props: TaskInfo) => {
       )}
       <HStack spacing="$2" w="$full" justifyContent="space-between">
         <Badge
-          colorScheme={StatusColor[props.state as keyof typeof StatusColor]}
+          colorScheme={
+            StatusColor[props.state as keyof typeof StatusColor] ?? "info"
+          }
         >
           {t("tasks.state." + props.state)}
         </Badge>
