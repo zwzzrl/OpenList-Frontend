@@ -1,21 +1,7 @@
-// src/store/task.ts
 import { createSignal } from "solid-js"
 import { createStore } from "solid-js/store"
 import { r } from "~/utils"
-
-export interface TaskInfo {
-  id: string
-  name: string
-  creator: string
-  creator_role: number
-  state: number
-  status: string
-  progress: number
-  start_time: string | null
-  end_time: string | null
-  total_bytes: number
-  error: string
-}
+import type { TaskInfo } from "~/types"
 
 const [tasks, setTasks] = createStore<TaskInfo[]>([])
 const [loading, setLoading] = createSignal(false)
@@ -24,21 +10,30 @@ export const fetchTasks = async (showLoading = true) => {
   if (showLoading) setLoading(true)
   try {
     const [respOld, respNew] = await Promise.all([
-      r.get("/task/offline_download/undone").catch(() => ({ data: [] })),
-      r
-        .get("/task/offline_download_transfer/undone")
-        .catch(() => ({ data: [] })),
+      r.get("/task/offline_download/undone"),
+      r.get("/task/offline_download_transfer/undone"),
     ])
-
+    const getTasksFromResp = (resp: any, label: string): any[] => {
+      if (!resp || resp.code !== 200) {
+        const message =
+          resp && typeof resp.message === "string"
+            ? resp.message
+            : "Unknown error"
+        throw new Error(`Failed to fetch ${label}: ${message}`)
+      }
+      const data = resp.data
+      return Array.isArray(data) ? data : []
+    }
     const taskMap = new Map<string, TaskInfo>()
-
-    const oldTasks = respOld.data || []
+    const oldTasks = getTasksFromResp(respOld, "offline download tasks")
     oldTasks.forEach((item: any) => {
       if (!item.state) item.state = 0
       taskMap.set(item.id, item)
     })
-
-    const newTasks = respNew.data || []
+    const newTasks = getTasksFromResp(
+      respNew,
+      "offline download transfer tasks",
+    )
     newTasks.forEach((item: any) => {
       taskMap.set(item.id, item)
     })

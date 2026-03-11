@@ -3,7 +3,6 @@ import {
   createDisclosure,
   HStack,
   Heading,
-  Button,
   VStack,
   Text,
 } from "@hope-ui/solid"
@@ -96,6 +95,7 @@ export const OfflineDownload = () => {
     if (name === "offline_download") {
       onOpen()
       setShowTasks(true)
+      fetchTasks(true)
     }
   }
   bus.on("tool", handler)
@@ -112,28 +112,43 @@ export const OfflineDownload = () => {
   ) => {
     const resp = await ok(pathname(), urls.split("\n"), tool(), deletePolicy())
     handleRespWithNotifySuccess(resp, () => {
-      fetchTasks(false) // 不显示 loading
+      fetchTasks(true) // 显示 loading
       setValue("")
     })
   }
 
   // 定时刷新任务进度（仅当显示任务列表时）
   let timer: number | undefined
+  let isFetching = false
   createEffect(() => {
     if (showTasks()) {
-      // 打开时立即获取一次最新数据，不显示 loading
-      fetchTasks(false)
-      // 启动定时器，每隔3秒刷新（也不显示 loading）
-      timer = window.setInterval(() => fetchTasks(false), 3000)
+      const poll = async () => {
+        if (!showTasks()) return
+        if (isFetching) {
+          timer = window.setTimeout(poll, 3000)
+          return
+        }
+        isFetching = true
+        try {
+          await fetchTasks(false)
+        } finally {
+          isFetching = false
+        }
+        if (showTasks()) {
+          timer = window.setTimeout(poll, 3000)
+        }
+      }
+      void poll()
     } else {
-      clearInterval(timer)
+      clearTimeout(timer)
       timer = undefined
     }
   })
 
   onCleanup(() => {
-    clearInterval(timer)
+    clearTimeout(timer)
   })
+
   // 拖拽种子文件转换为磁力链接
   const handleTorrentFileDrop = async (
     e: DragEvent,

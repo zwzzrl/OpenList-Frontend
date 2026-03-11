@@ -1,4 +1,3 @@
-// src/pages/home/toolbar/TaskProgress.tsx
 import {
   VStack,
   HStack,
@@ -7,35 +6,11 @@ import {
   Progress,
   ProgressIndicator,
 } from "@hope-ui/solid"
-import { TaskInfo } from "./task"
+import type { TaskInfo } from "~/types"
 import { getFileSize } from "~/utils"
-import { Show, createSignal, JSX } from "solid-js"
+import { Show } from "solid-js"
 import { useT } from "~/hooks"
-import { me } from "~/store"
-
-// 复制 helper.tsx 中的 getPath 函数（用于生成路径链接）
-const getPath = (
-  device: string,
-  path: string,
-  asLink: boolean = true,
-): JSX.Element => {
-  const fullPath = (device === "/" ? "" : device) + path
-  const prefix = me().base_path === "/" ? "" : me().base_path
-  const accessible = fullPath.startsWith(prefix)
-  const [underline, setUnderline] = createSignal(false)
-  return accessible && asLink ? (
-    <a
-      style={underline() ? "text-decoration: underline" : ""}
-      onMouseOver={() => setUnderline(true)}
-      onMouseOut={() => setUnderline(false)}
-      href={fullPath.slice(prefix.length)}
-    >
-      {fullPath}
-    </a>
-  ) : (
-    <p>{fullPath}</p>
-  )
-}
+import { getPath } from "../../manage/tasks/helper"
 
 // 解析任务名称，返回文件名和路径信息
 const parseTaskName = (name: string) => {
