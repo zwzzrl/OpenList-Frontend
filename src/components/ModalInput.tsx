@@ -92,13 +92,13 @@ export const ModalInput = (props: ModalInputProps) => {
         return
       }
     }
-   if (props.onSubmitWithValue) {
+    if (props.onSubmitWithValue) {
       props.onSubmitWithValue(value(), setValue)
     } else {
       props.onSubmit?.(value())
-    }  
+    }
   }
-  
+
   const handleInput = (newValue: string) => {
     setValue(newValue)
     if (props.validateFilename) {
