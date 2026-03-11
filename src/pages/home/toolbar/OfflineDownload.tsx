@@ -124,7 +124,7 @@ export const OfflineDownload = () => {
       // 打开时立即获取一次最新数据，不显示 loading
       fetchTasks(false)
       // 启动定时器，每隔3秒刷新（也不显示 loading）
-      timer = setInterval(() => fetchTasks(false), 3000)
+      timer = window.setInterval(() => fetchTasks(false), 3000)
     } else {
       clearInterval(timer)
       timer = undefined
