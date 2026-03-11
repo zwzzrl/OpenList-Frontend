@@ -26,8 +26,8 @@ import {
 import { PResp } from "~/types"
 import bencode from "bencode"
 import crypto from "crypto-js"
-import { useTasks } from "../offlinedownload/task"
-import TaskItem from "../offlinedownload/TaskProgress"
+import { useTasks } from "~/store/task"
+import TaskItem from "./TaskProgress"
 import { FullLoading } from "~/components/FullLoading"
 
 const deletePolicies = [
