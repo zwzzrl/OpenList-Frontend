@@ -27,7 +27,7 @@ export const fetchTasks = async (showLoading = true) => {
       r.get("/task/offline_download/undone").catch(() => ({ data: [] })),
       r
         .get("/task/offline_download_transfer/undone")
-        .catch(() => ({ data: [] }))
+        .catch(() => ({ data: [] })),
     ])
 
     const taskMap = new Map<string, TaskInfo>()

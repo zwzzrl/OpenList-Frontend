@@ -5,7 +5,7 @@ import {
   Heading,
   Button,
   VStack,
-  Text
+  Text,
 } from "@hope-ui/solid"
 import { ModalInput, SelectWrapper } from "~/components"
 import { useFetch, useRouter, useT } from "~/hooks"
@@ -14,7 +14,7 @@ import {
   bus,
   handleRespWithNotifySuccess,
   r,
-  handleResp
+  handleResp,
 } from "~/utils"
 import {
   createSignal,
@@ -22,7 +22,7 @@ import {
   onMount,
   createEffect,
   For,
-  Show
+  Show,
 } from "solid-js"
 import { PResp } from "~/types"
 import bencode from "bencode"
@@ -36,7 +36,7 @@ const deletePolicies = [
   "delete_on_upload_succeed",
   "delete_on_upload_failed",
   "delete_never",
-  "delete_always"
+  "delete_always",
 ] as const
 
 type DeletePolicy = (typeof deletePolicies)[number]
@@ -65,7 +65,7 @@ function toMagnetUrl(torrentBuffer: Uint8Array) {
   }
 
   return `magnet:?xt=urn:btih:${infoHash}&${new URLSearchParams(
-    params
+    params,
   ).toString()}`
 }
 
@@ -77,7 +77,7 @@ export const OfflineDownload = () => {
   })
   const [tool, setTool] = createSignal("")
   const [deletePolicy, setDeletePolicy] = createSignal<DeletePolicy>(
-    "upload_download_stream"
+    "upload_download_stream",
   )
   onMount(async () => {
     const resp = await reqTool()
@@ -108,7 +108,7 @@ export const OfflineDownload = () => {
 
   const handleSubmit = async (
     urls: string,
-    setValue: (value: string) => void
+    setValue: (value: string) => void,
   ) => {
     const resp = await ok(pathname(), urls.split("\n"), tool(), deletePolicy())
     handleRespWithNotifySuccess(resp, () => {
@@ -137,7 +137,7 @@ export const OfflineDownload = () => {
   // 拖拽种子文件转换为磁力链接
   const handleTorrentFileDrop = async (
     e: DragEvent,
-    setValue: (value: string) => void
+    setValue: (value: string) => void,
   ) => {
     e.preventDefault()
     if (e.dataTransfer?.files.length) {
@@ -199,11 +199,11 @@ export const OfflineDownload = () => {
                 .filter((policy) =>
                   policy === "upload_download_stream"
                     ? tool() === "SimpleHttp"
-                    : true
+                    : true,
                 )
                 .map((policy) => ({
                   value: policy,
-                  label: t(`home.toolbar.delete_policy.${policy}`)
+                  label: t(`home.toolbar.delete_policy.${policy}`),
                 }))}
             />
           </Box>

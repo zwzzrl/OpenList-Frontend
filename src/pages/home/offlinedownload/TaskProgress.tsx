@@ -5,7 +5,7 @@ import {
   Text,
   Badge,
   Progress,
-  ProgressIndicator
+  ProgressIndicator,
 } from "@hope-ui/solid"
 import { TaskInfo } from "./task"
 import { getFileSize } from "~/utils"
@@ -17,7 +17,7 @@ import { me } from "~/store"
 const getPath = (
   device: string,
   path: string,
-  asLink: boolean = true
+  asLink: boolean = true,
 ): JSX.Element => {
   const fullPath = (device === "/" ? "" : device) + path
   const prefix = me().base_path === "/" ? "" : me().base_path
@@ -45,12 +45,12 @@ const parseTaskName = (name: string) => {
     return {
       type: "download" as const,
       fileName: match[1],
-      path: match[2]
+      path: match[2],
     }
   }
   // transfer/upload 类型：transfer [设备](路径) to [目标设备](目标路径) 或 upload [文件名](URL) to [目标设备](目标路径)
   match = name.match(
-    /^(transfer|upload) \[(.*?)\]\((.*?)\) to \[(.*?)\]\((.*?)\)$/
+    /^(transfer|upload) \[(.*?)\]\((.*?)\) to \[(.*?)\]\((.*?)\)$/,
   )
   if (match) {
     const type = match[1] as "transfer" | "upload"
@@ -68,7 +68,7 @@ const parseTaskName = (name: string) => {
         srcDevice: bracketContent,
         srcPath: urlOrPath,
         dstDevice,
-        dstPath
+        dstPath,
       }
     } else {
       // upload 类型：文件名直接取自方括号
@@ -78,7 +78,7 @@ const parseTaskName = (name: string) => {
         srcDevice: "",
         srcPath: urlOrPath,
         dstDevice,
-        dstPath
+        dstPath,
       }
     }
   }
@@ -91,7 +91,7 @@ export const StatusColor = {
   2: "warning",
   3: "danger",
   4: "success",
-  5: "info"
+  5: "info",
 } as const
 
 export const TaskItem = (props: TaskInfo) => {
