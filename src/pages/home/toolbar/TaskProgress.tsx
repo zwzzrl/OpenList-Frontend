@@ -70,7 +70,7 @@ export const StatusColor = {
   5: "info",
 } as const
 
-export const TaskItem = (props: TaskInfo) => {
+export const OfflineDownloadTaskItem = (props: TaskInfo) => {
   const t = useT()
   const parsed = parseTaskName(props.name)
 
@@ -137,4 +137,4 @@ export const TaskItem = (props: TaskInfo) => {
   )
 }
 
-export default TaskItem
+export default OfflineDownloadTaskItem

@@ -27,7 +27,7 @@ import {
   offlineDownload,
   r,
 } from "~/utils"
-import TaskItem from "./TaskProgress"
+import OfflineDownloadTaskItem from "./TaskProgress"
 
 const deletePolicies = [
   "upload_download_stream",
@@ -94,7 +94,7 @@ export const OfflineDownload = () => {
     if (name === "offline_download") {
       onOpen()
       setShowTasks(true)
-      fetchTasks(true)
+      fetchOfflineDownloadTasks(true)
     }
   }
   bus.on("tool", handler)
@@ -102,7 +102,7 @@ export const OfflineDownload = () => {
     bus.off("tool", handler)
   })
 
-  const { tasks, loading: tasksLoading, fetchTasks } = useTasks()
+  const { tasks, loading: tasksLoading, fetchOfflineDownloadTasks } = useTasks()
   const [showTasks, setShowTasks] = createSignal(false)
 
   const handleSubmit = async (
@@ -111,7 +111,7 @@ export const OfflineDownload = () => {
   ) => {
     const resp = await ok(pathname(), urls.split("\n"), tool(), deletePolicy())
     handleRespWithNotifySuccess(resp, () => {
-      fetchTasks(true) // 显示 loading
+      fetchOfflineDownloadTasks(true) // 显示 loading
       setValue("")
     })
   }
@@ -129,7 +129,7 @@ export const OfflineDownload = () => {
         }
         isFetching = true
         try {
-          await fetchTasks(false)
+          await fetchOfflineDownloadTasks(false)
         } finally {
           isFetching = false
         }
@@ -238,7 +238,7 @@ export const OfflineDownload = () => {
               </HStack>
               <Show when={!tasksLoading()} fallback={<FullLoading />}>
                 <VStack spacing="$2">
-                  <For each={tasks}>{(task) => <TaskItem {...task} />}</For>
+                  <For each={tasks}>{(task) => <OfflineDownloadTaskItem {...task} />}</For>
                   <Show when={tasks.length === 0}>
                     <Text color="$neutral11" textAlign="center" w="$full">
                       {t("tasks.attr.offline_download.no_tasks")}

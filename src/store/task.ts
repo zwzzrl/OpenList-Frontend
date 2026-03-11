@@ -6,7 +6,7 @@ import type { TaskInfo } from "~/types"
 const [tasks, setTasks] = createStore<TaskInfo[]>([])
 const [loading, setLoading] = createSignal(false)
 
-export const fetchTasks = async (showLoading = true) => {
+export const fetchOfflineDownloadTasks = async (showLoading = true) => {
   if (showLoading) setLoading(true)
   try {
     const [respOld, respNew] = await Promise.all([
@@ -56,4 +56,4 @@ export const fetchTasks = async (showLoading = true) => {
   }
 }
 
-export const useTasks = () => ({ tasks, loading, fetchTasks })
+export const useTasks = () => ({ tasks, loading, fetchOfflineDownloadTasks })
