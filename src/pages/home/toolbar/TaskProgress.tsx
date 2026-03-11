@@ -123,7 +123,7 @@ export const TaskItem = (props: TaskInfo) => {
         w="$full"
         trackColor="$info3"
         rounded="$full"
-        value={props.progress * 100}
+        value={props.progress}
         size="sm"
       >
         <ProgressIndicator color="$info6" rounded="$md" />
